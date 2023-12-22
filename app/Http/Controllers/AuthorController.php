@@ -4,32 +4,61 @@ namespace App\Http\Controllers;
 
 use App\Models\Author;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class AuthorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        $files = Author::all();
+        $authors = Author::all();
 
-        return view('authors.index', compact('files'));
+        return view('authors.index', compact('authors'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function saveCsv(Request $request)
     {
-        $files = Author::all();
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|extensions:csv'
+        ]);
 
-        return view('authors.index', compact('files'));
-    }
+        if ($validator->fails()) {
+            return redirect()->route('index')
+                ->withErrors($validator)
+                ->withInput();
+        }
 
-    public function store(Request $request)
-    {
+        $file = $request->file;
 
+        $authors = [];
+
+        if (($open = fopen($file, "r")) !== FALSE) {
+
+            $header = fgetcsv($open, 1000, ",");
+
+            while (($data = fgetcsv($open, 1000, ",")) !== FALSE) {
+
+                $row = array_combine($header, $data);
+                $authors[] = $row;
+            }
+
+            fclose($open);
+        }
+
+
+        foreach ($authors as $author) {
+
+            Author::create([
+                'first_name'        => $author['First Name'],
+                'last_name'         => $author['Last Name'],
+                'date_of_birth'     => $author['Date of Birth'],
+                'date_of_death'     => $author['Date of Death'],
+                'book'              => $author['Books'],
+                'nobel_prize'       => $author['Nobel Prize Winner']
+            ]);
+        }
+
+        return redirect()->route('index');
     }
 
 }

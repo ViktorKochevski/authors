@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,4 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('/', App\Http\Controllers\AuthorController::class);
+Route::get('/', [AuthorController::class, 'index'])->name('index');
+Route::post('/csv-upload', [AuthorController::class, 'saveCsv'])->name('csv.save');
+
