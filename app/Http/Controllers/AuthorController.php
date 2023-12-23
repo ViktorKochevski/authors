@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Author;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
@@ -60,6 +61,14 @@ class AuthorController extends Controller
         }
 
         Session::flash('flash_message', 'CSV successfully uploaded!');
+
+        return redirect()->route('index');
+    }
+
+    public function clearData()
+    {
+        DB::table('authors')->delete();
+        Session::flash('flash_message', 'All data successfully deleted!');
 
         return redirect()->route('index');
     }

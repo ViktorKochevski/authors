@@ -23,7 +23,7 @@
             <div class="col-6 text-center">
                 <form method="POST" action="{{ route('csv.save') }}" enctype="multipart/form-data">
                     @csrf
-                    <label class="form-label text-white">Upload your CSV file here</label>
+                    <label class="form-label mb-5">Upload your CSV file below</label>
                     <input type="file" name="file" id="file" class="form-control @error('file') is-invalid @enderror">
                     @error('file')
                     <span class="invalid-feedback" role="alert">
@@ -56,7 +56,12 @@
 
         <div class="col-11 mx-auto">
             <div class="card-body pb-3">
-                <div class="table-responsive">
+                <div class="d-flex flex-row justify-content-end">
+                    <a href="{{ route('clear-all-data') }}">
+                        <button class="btn btn-danger">Clear data</button>
+                    </a>
+                </div>
+                    <div class="table-responsive">
                     <table class="table align-items-center">
                         <thead>
                         <tr>

@@ -16,4 +16,4 @@ use App\Http\Controllers\AuthorController;
 
 Route::get('/', [AuthorController::class, 'index'])->name('index');
 Route::post('/csv-upload', [AuthorController::class, 'saveCsv'])->name('csv.save');
-
+Route::get('/clear-all-data', [AuthorController::class, 'clearData'])->name('clear-all-data');
